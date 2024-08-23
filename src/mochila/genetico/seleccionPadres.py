@@ -7,10 +7,10 @@ def seleccionPadres(k,funcion_objetivo_pop,poblacion_inicial,tamanio_poblacion,n
     # construir tabla candidatos: columna uno indices candidatos aleatorios, columna dos sus FO
     tabla_candidatos = np.zeros((tamanio_poblacion,2))  # inicializar
     tabla_candidatos[:, 0] = indices_candidatos      # indexar
-    tabla_candidatos[:, 1] = funcion_objetivo_pop      # indexar
+    tabla_candidatos[:, 1] = funcion_objetivo_pop[indices_candidatos] # Se indexa para que cargue las funciones objetivos correspondientes a cada indice de candidatos
 
     # seleccion de k candidatos
-    #muestra = tabla_candidatos[0:"cantidad candidatos",:]
+    muestra = tabla_candidatos[0:"cantidad candidatos",:]
     
     # ordendar la muestra de menor a mayor por función objetivo
     #muestra = 
