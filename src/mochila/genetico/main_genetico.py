@@ -59,56 +59,66 @@ print(f"Peso incumbente: {peso_incumbente}")
 with tqdm(total=len(range(maximo_iteraciones))) as pbar:
     for i in range(maximo_iteraciones):
         # seleccionar padres
-        padres = seleccionPadres(k,funcion_objetivo_pop,poblacion,tamanio_poblacion,numero_objetos) 
+        padres = seleccionPadres(k,funcion_objetivo_pop,poblacion,tamanio_poblacion) 
 
         # Cruzamiento
-        #hijos = cruzamiento(padres)
+        hijos = cruzamiento(padres)
 
         # selección del mejor hijo
-        #func_obj = funcion_objetivo(hijos,precio_objetos,peso_objetos,peso_maximo)
-        
+        func_obj,peso_actual = funcion_objetivo(hijos,precio_objetos,peso_objetos,peso_maximo_mochila) # El guion bajo (",_" después de func_obj) sirve para que no se tome el segundo retorno que generaria func_obj
+
         # mejor hijo como el que tenga mejor función objetivo
-        #mejor_hijo = 
+        indice_mejor_hijo = np.argmax(func_obj)
+        #print(indice_mejor_hijo)
+
+        mejor_hijo = hijos[indice_mejor_hijo]
 
         # mutación
-        #mejor_hijo_mutado = mutacion(mejor_hijo,tasa_mutacion,numero_objetos)
-        #func_obj_mutado,_ = funcion_objetivo([mejor_hijo_mutado], precio_objetos,peso_objetos,peso_maximo)
+        mejor_hijo_mutado = mutacion(mejor_hijo,tasa_mutacion,numero_objetos)
         
         # extraer el valor de la función objetivo del objeto de retorno de "funcion_objetivo" 
-        #func_obj_mutado = 
+        func_obj_mutado,peso_hijo_mutado = funcion_objetivo([mejor_hijo_mutado], precio_objetos,peso_objetos,peso_maximo_mochila)
 
+        # mejor hijo mutado como el que tenga mejor función objetivo
+        
+        # Requiero ingresar mejor_hijo_mutado a la poblacion
         # verificar si solución existe en población
-        #ingresa = False
-        #indices = np.where((poblacion == mejor_hijo_mutado).all(axis=1))  # verifica cada vector de la población con el mejor hijo mutado.
-        #if len(indices[0]) == 0:
-            #peso_hijo_mutado = 
+    
+        indices_si_existe = np.where((poblacion == mejor_hijo_mutado).all(axis=1))  # verifica cada vector de la población con el mejor hijo mutado.
+
+        
+
+
+        ingresa = False # Ingresa a la poblacion
+        if len(indices_si_existe[0]) == 0: # Verifica si existe
+            peso_hijo_mutado = peso_hijo_mutado[0]
             # verificar si es factible por peso y si es mejor que incumbente para ingresar a población
-            #if peso_hijo_mutado < peso_maximo and func_obj_mutado > incumbente:
-            #    ingresa = True
+            if peso_hijo_mutado < peso_maximo_mochila and func_obj_mutado > incumbente:
+                ingresa = True
 
         # actualización de la población
-        #if ingresa:
+        if ingresa:
             # encontrar miembro de la población con menor función objetivo
-            #posicion_menor = 
+            posicion_menor = np.argmin(funcion_objetivo_pop)
             # actualizar miembro de la población con menor función objetivo con el mejor hijo mutado y su función objetivo
-            #poblacion[posicion_menor] = 
-            #funciones_objetivo_pop[posicion_menor] = 
-
-        # actualizar incumbente
-        #incumbente = 
-        #solucion_incumbente = 
-        # anexar incumbente a la historia_icumbente
-        #historia_incumbente...
+            poblacion[posicion_menor] = mejor_hijo_mutado
+            funcion_objetivo_pop[posicion_menor] = func_obj_mutado[0]
+            #print("")
+            # actualizar incumbente
+            incumbente = func_obj_mutado[0]
+            solucion_incumbente = mejor_hijo_mutado
+            # anexar incumbente a la historia_icumbente
+            historia_incumbente.append(incumbente)
         
-        #pbar.set_description(f"fo_incumbente: {incumbente}") # activar para la barra de progreso
-        #pbar.update() # activar para la barra de progreso
+        pbar.set_description(f"fo_incumbente: {incumbente}") # activar para la barra de progreso
+        pbar.update() # activar para la barra de progreso
     
 
 #solucion_incumbente = 
 #peso_incumbente = 
-#print(f"\n Solución incumbente: {solucion_incumbente} \n")
-#print(f"peso incumbente: {peso_incumbente} \n")
+print(f"\n Solución incumbente: {solucion_incumbente} \n")
+print(f"peso incumbente: {peso_incumbente} \n")
 
 # gráfico de mejoramiento de función objetivo
-#fig = px.line(historia_incumbente)
-#fig.show()
+fig = px.line(historia_incumbente)
+fig.show()
