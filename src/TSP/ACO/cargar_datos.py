@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 
-def cargar_datos() -> np.ndarray:
+def cargar_datos() -> np.ndarray: # El          np.ndarray es una forma de control para que verificar que lo evueto
     # load the data from the csv file
     # build the path in in data/A-n33-k6.csv
     path_file = os.path.join('src', 'TSP', 'ACO', 'data', 'A-n33-k6.csv')

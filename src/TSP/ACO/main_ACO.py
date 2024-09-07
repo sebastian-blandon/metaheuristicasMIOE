@@ -10,12 +10,14 @@ import plotly.graph_objects as go
 import random
 
 # Establecer semilla aleatoria
+random.seed(0)
+np.random.seed(0)
 
 # Cargar datos
 coordenadas = cargar_datos()
 
 # Número de clientes
-#n:int = 
+n:int = len(coordenadas)
 
 # Parametros algoritmo ACO
 m:int = 10 #Número de hormigas. Debe ser menor al número de clientes n
@@ -24,26 +26,26 @@ Cnn:int = 1000 #Longitud inicial del circuito
 alpha:int = 1 #Importancia relativa de depositos de feromona
 beta:int = 5 #Importancia relativa de los nodos más cercanos
 rho:float = 0.1 #Factor de evaporación
-#Tao:np.ndarray = np.ones((n,n)) * m / Cnn #matriz de feromonas nxn (clientes)
+Tao:np.ndarray = np.ones((n,n)) * m / Cnn #matriz de feromonas nxn (clientes)
 iterMax:int = 100 #Número máximo de iteraciones
 pbar = tqdm(total=iterMax)
 
-#dist:np.ndarray = distancias(coordenadas)
+dist:np.ndarray = distancias(coordenadas) # Matriz de distancias
 
 # inicializar matriz Matriz_longitud_tours (históricos de función objetivo)
-#Matriz_longitud_tours = 
+Matriz_longitud_tours = np.zeros((iterMax,2)) # Guarda el historico
 
 # incumbente inicial: valor infinito (minimización)
-incumbente:float = 1000000000000
+incumbente:float = 1000000000000000000
 
 k = 0 # contador de inserción de incumbentes
-#for i in range(iterMax):
-#    pbar.update()
-#
-#    #Construir soluciones
-#    circuitos,longitud_tours = construir_soluciones(Tao,dist,m,n,alpha,beta)
-#    soluciones,longitud_tours = busquedaLocal(circuitos,dist,longitud_tours)
-#    
+for i in range(iterMax):
+    pbar.update()
+
+    #Construir soluciones
+    circuitos,longitud_tours = construir_soluciones(Tao,dist,m,n,alpha,beta)
+    soluciones,longitud_tours = busquedaLocal(circuitos,dist,longitud_tours)
+    
 #    # Verificar si hay mejoramiento
 #    if np.min(longitud_tours) < incumbente:
 #        incumbente = 

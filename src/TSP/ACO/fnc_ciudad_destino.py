@@ -12,11 +12,11 @@ def fnc_ciudad_destino(candidato_destino:int,
     
     # calculo del denominador de la función de probabilidad
     # inicializar vector de probabilidad con tamaño n.
-    #probabilidad:np.ndarray = 
+    probabilidad:np.ndarray = np.zeros((1,n))
     denominador:float = 0.0
-    #for i in range(n):
-    #    verificar matriz de ciudades visitadas y que i no sea la ciuidad de inicio del arco.
-    #    if  :
+    for i in range(n): # Bucle para calcular la sumatoria del denominador
+        #verificar matriz de ciudades visitadas y que i no sea la ciuidad de inicio del arco.
+        if  M[candidato_destino,i] == 0 and i != ciudad_inicial:
     #        denominador = 
       
     
