@@ -2,26 +2,30 @@ import numpy as np
 from funcionObjetivo import funcionObjetivo
 from opt_operator import opt_operator
 from tqdm import tqdm
+import random
 
 ######## Algoritmo de búsqueda tabu para el problema de asignación ########
 
 #establecer semilla (0) de numeros aleatorios en numpy
-### Inserte aquí su código ###
+np.random.seed(0)
+random.seed(0)
 
 #generar matriz de costos para problema de asignación
 numero_agentes:int = 50
 numero_tareas:int = 50
+
+# Parametros
 numero_vecinos:int = 8000
 Tamano_vecindario_explorar:int = 10
 periodo_tabu:int = 10
 
 # definir matriz de costos aleatoría
 costos:np.ndarray = np.random.randint(1,10,size=(numero_agentes,numero_tareas),dtype=int)
-#print(costos)
+#print(costos) # Se deja como comentario, porque ya verificamos que se este generando la matriz de costo segun lo esperado
 
 # construcción de solución e incumbente inicial
-#incumbente:np.ndarray =  
-#fo_incumbente:int = 
+incumbente:np.ndarray =  np.random.permutation(numero_agentes) # Por defecto, la permutacion toma valores enteros
+fo_incumbente:int = funcionObjetivo(incumbente,costos)
 #incumbente_inicial:np.ndarray =   # se almacena el incumbente inicial para comparar con el de la mejor solución
 #fo_inicial:int =   # se almacena el valor de la función objetivo del incumbente para comparar con el de la mejor solución
 
