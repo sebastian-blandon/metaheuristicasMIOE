@@ -6,7 +6,7 @@ def poblacion_inicial(tamanio_poblacion,numero_objetos,peso_maximo_mochila,peso_
     # inicializar matriz de población como un array de numpy
     poblacion_inicio = np.zeros((tamanio_poblacion, numero_objetos), dtype=int)
     i = 0
-    while i < tamanio_poblacion: #generación de individuos aleatorios: vector binario
+    while i < tamanio_poblacion: #generación de individuos aleatorios: vector con rutas aleatorias
         individuo = np.random.randint(0,2, numero_objetos) # Esto es un vector
         # obtener el peso del individuo
         peso_individuo = np.sum(individuo*peso_objetos)

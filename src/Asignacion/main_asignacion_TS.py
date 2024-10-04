@@ -26,80 +26,85 @@ costos:np.ndarray = np.random.randint(1,10,size=(numero_agentes,numero_tareas),d
 # construcción de solución e incumbente inicial
 incumbente:np.ndarray =  np.random.permutation(numero_agentes) # Por defecto, la permutacion toma valores enteros
 fo_incumbente:int = funcionObjetivo(incumbente,costos)
-#incumbente_inicial:np.ndarray =   # se almacena el incumbente inicial para comparar con el de la mejor solución
-#fo_inicial:int =   # se almacena el valor de la función objetivo del incumbente para comparar con el de la mejor solución
+incumbente_inicial:np.ndarray =  incumbente.copy() # se almacena el incumbente inicial para comparar con el de la mejor solución
+fo_inicial:int = fo_incumbente  # se almacena el valor de la función objetivo del incumbente para comparar con el de la mejor solución
 
 #generación de vecindario aleatorias a través de permutaciones
-#vecindario:np.ndarray =    # inicializa array
-#Tamano_vecindario:int = 
+vecindario:np.ndarray = np.zeros((numero_vecinos,numero_tareas), dtype=int)   # inicializa array
+Tamano_vecindario:int = numero_vecinos
 
 # generación de vecindario
-### inserte aquí su código ###
+for agente in range(numero_vecinos):
+    vecino = np.random.permutation(numero_agentes)
+    vecindario[agente,:] = vecino
 
 #print(vecindario)
 
 #iniciar historia tabu
-#memoria_tabu:np.ndarray =    # inicializa variable
+memoria_tabu:np.ndarray = np.zeros((numero_agentes,numero_tareas), dtype=int)   # inicializa variable
 
 ### inicio exploración de vecindarios a través de un vecino ###
 iter:int = 0
 
-#with tqdm(total=len(range(Tamano_vecindario))) as pbar:
-    #while iter < Tamano_vecindario:
+with tqdm(total=len(range(Tamano_vecindario))) as pbar:
+    while iter < Tamano_vecindario:
         
         #seleccionar un vecino aleatorio del vecindario
-        #indice_vecino_aleatorio:int = 
-        #vecino = 
+        indice_vecino_aleatorio:int = np.random.randint(Tamano_vecindario)
+        vecino = vecindario[indice_vecino_aleatorio,:]
 
         #generar candidatos a mejoramiento a partir de un vecino usando operadores de intercambio
-        #vecindario_candidatos:np.ndarray =     #inicializa variable
-        #movimientos_candidatos:np.ndarray =    #inicializa variable
+        vecindario_candidatos:np.ndarray = np.zeros((Tamano_vecindario_explorar,numero_tareas), dtype=int)   #inicializa variable
+        movimientos_candidatos:np.ndarray = np.zeros((Tamano_vecindario_explorar,2), dtype=int)  #inicializa variable
         
-        #for i in range(Tamano_vecindario_explorar):
-        
-            #nuevo_vecino, movimiento = opt_operator(vecino,memoria_tabu)
-            #vecindario_candidatos[i,:] = 
+        for i in range(Tamano_vecindario_explorar):
+            
+            nuevo_vecino, movimiento = opt_operator(vecino,memoria_tabu)
+            vecindario_candidatos[i,:] = nuevo_vecino
             
             #insertar la tupla de movimientos en el vector de movimientos candidatos
-            #movimientos_candidatos[i,:] = 
+            movimientos_candidatos[i,:] = movimiento
 
         #iniciar vector de funciones objetivo
-        #fo_v:np.ndarray = np.zeros(Tamano_vecindario_explorar,dtype=int) # funciones objetivo del vencidario. Inicializar variable
+        fo_v:np.ndarray = np.zeros(Tamano_vecindario_explorar,dtype=int) # funciones objetivo del vencidario. Inicializar variable
         
         #obtener funciones objetivo de cada vecindario
-        ### inserte aquí su código ###
+        for i in range(Tamano_vecindario_explorar):
+            fo_v[i] = funcionObjetivo(vecindario_candidatos[i,:],costos)
         #print(fo_v)
 
         #inicializar valor de la función objetivo actual en infinito
-        #fo_iter:int = 100000
+        fo_iter:int = 100000
 
         #inicio verificación del vecindario respecto a la incumbente
-        #indice_vecino_mejora: int = -1 # variable que almacena indice
-        ### inserte aquí su código (verificación vecino con incumbente) ###
-        
+        indice_vecino_mejora: int = -1 # variable que almacena indice
+        for i in range(Tamano_vecindario_explorar):
+            if fo_v[i] < fo_iter:
+                fo_iter = fo_v[i]
+                indice_vecino_mejora = i
         
         # actualizar incumbente y memoría tabu memoria tabú
-        #if XXXX < XXXX:
-            #fo_incumbente = 
-            #incumbente = 
-            #memoria_tabu[X,Y] = 
-            #memoria_tabu[Y,X] = 
-        #else:
+        if fo_iter < fo_incumbente:
+            fo_incumbente = fo_iter
+            incumbente = vecindario_candidatos[indice_vecino_mejora,:]
+            memoria_tabu[movimientos_candidatos[indice_vecino_mejora,0],movimientos_candidatos[indice_vecino_mejora,1]] = periodo_tabu
+            memoria_tabu[movimientos_candidatos[indice_vecino_mejora,1],movimientos_candidatos[indice_vecino_mejora,0]] = periodo_tabu
+        else:
             # definir la variable <condicion> de tipo bool que verifique si memoria_tabu es mayor que cero
-            #condicion = 
+            condicion = memoria_tabu > 0
             # actualizar memoría tabu de acuerdo al valor en <condicion>
-            #memoria_tabu = 
+            memoria_tabu = np.where(condicion,memoria_tabu-1,memoria_tabu)
         
         # actualizar contador de iteraciones
-         ### inserte aquí su código ###
+        iter += 1
         
-        #pbar.set_description(f"fo_incumbente: {fo_incumbente}")
-        #pbar.update()
+        pbar.set_description(f"fo_incumbente: {fo_incumbente}")
+        pbar.update()
 
-    #pbar.close()
+    pbar.close()
 
-#print(f"La función objetivo inicial era: {fo_inicial}")
-#print(f"La solución inicial era: {incumbente_inicial}")
-#print(f"La función objetivo despues de usar TS es: {fo_incumbente}")
-#print(f"La solución despues de usar TS es: {incumbente}")
+print(f"La función objetivo inicial era: {fo_inicial}")
+print(f"La solución inicial era: {incumbente_inicial}")
+print(f"La función objetivo despues de usar TS es: {fo_incumbente}")
+print(f"La solución despues de usar TS es: {incumbente}")
 
